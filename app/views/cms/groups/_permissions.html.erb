@@ -1,0 +1,14 @@
+<div id="permissions">
+    <%= f.association :permissions,
+                      collection: Cms::Permission.order(:name),
+                      as: :check_boxes,
+                      label: 'Global Permissions',
+                      label_method: lambda { |permission| "#{permission.full_name} (#{permission.description})"},
+                      :input_html => { :class => "check_uncheck" }
+                      # Note: Check/uncheck only works once, and was not broken by this refactoring.
+    %>
+  <div class="check_uncheck">
+    <%= check_uncheck_tag 'input.check_uncheck' %>
+  </div>
+</div>
+

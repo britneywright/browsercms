@@ -1,0 +1,12 @@
+
+<%= f.association :sections,
+                  collection: Cms::Section.order(:path),
+                  as: :check_boxes,
+                  label: 'Section Permissions',
+                  label_method: lambda { |s| "#{s.name} (Path: #{s.path})"},
+                  hint: "What sections should group members be allowed to <span id='section-action'>#{@group.cms_access? ? 'edit' : 'view'}</span>?".html_safe,
+                  :input_html => { :class => "section_ids" }
+%>
+<div class="check_uncheck">
+<%= check_uncheck_tag 'input.section_ids' %>
+</div>

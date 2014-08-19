@@ -1,0 +1,7 @@
+<% use_page_title "Page Cache" %>
+<%= render layout: 'page_title' do %>
+    <%= link_to "Clear", cache_path, class: 'btn btn-primary right http_delete', :rel=>'clear-cache' %>
+<% end %>
+<%= render layout: 'main_content' do %>
+    <p>The CMS caches pages which are frequently accessed by guest users to increase throughput. If a page appears stale, you may manually clear this page cache.</p>
+<% end %>

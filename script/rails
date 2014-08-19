@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+#This is standard Rails 4 Engine commands behavior.
+ENGINE_ROOT = File.expand_path('../..', __FILE__)
+ENGINE_PATH = File.expand_path('../../lib/cms/engine', __FILE__)
+
+# Modified the core `rails` script so that commands other than generate/destroy work in context of the test/dummy app.
+
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+    "g" => "generate",
+    "d" => "destroy"
+}
+
+command = ARGV.first
+command = aliases[command] || command
+
+case command
+  when 'generate', 'destroy'
+    require 'rails/all'
+    require 'rails/engine/commands'
+  else
+    # Commands like 'server' and 'console' will use test/dummy's rails script.
+    load File.expand_path('../../test/dummy/script/rails', __FILE__)
+
+end

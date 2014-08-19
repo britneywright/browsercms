@@ -1,0 +1,38 @@
+<%= content_for :html_head do %>
+    <%# Hide permissions based on whether is a CMS User group or not.  %>
+    <%= javascript_tag do %>
+
+        jQuery(function($){
+            var element = $('#group_group_type_id');
+            var cms_access_group_ids = <%= Cms::GroupType.cms_access.to_a.map { |e| e.id.to_s }.to_json.html_safe %>
+            element.change(function() {
+                if ($.inArray(element[0].value, cms_access_group_ids) < 0) {
+                    $('#permissions').hide();
+                    $('#section-action').text('view');
+                } else {
+                    $('#permissions').show();
+                    $('#section-action').text('edit');
+                }
+            }).change();
+        });
+    <% end %>
+<% end %>
+
+<%= simple_form_for @group do |f| %>
+    <%=  page_title_with_buttons(f, 'save_buttons') %>
+    <%= render layout: 'main_with_sidebar' do %>
+    <%= f.input :name, label: "Group Name" %>
+    <% unless @group.guest? %>
+        <%= f.association :group_type,
+                    collection: Cms::GroupType.non_guest,
+                    label: 'Type of User',
+                    hint: 'What kind of user does this group represent?',
+                    include_blank: false
+        %>
+    <% end %>
+
+    <%= render :partial => 'permissions', locals: {f: f} %>
+    <%= render :partial => 'sections', locals: {f: f} %>
+    <% end %>
+    <%= bottom_buttons f,  'save_buttons' %>
+<% end %>

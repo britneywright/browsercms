@@ -1,0 +1,36 @@
+<% use_page_title "Email Messages" %>
+<%= render layout: 'page_title' do
+end %>
+
+<%= render layout: 'main_content' do %>
+    <table class="data table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>To</th>
+        <th>Subject</th>
+        <th>Delivered</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @messages.each do |message| %>
+          <tr>
+            <td><%= link_to truncate(message.recipients), message %>
+            </td>
+            <td>
+              <%= message.subject %>
+            </td>
+            <td style="white-space: nowrap"><%= h time_on_date(message.delivered_at) %></td>
+          </tr>
+      <% end %>
+      <% if @messages.empty? %>
+          <tr>
+            <td colspan="3">No email messages.</td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+<% end %>
+<% if @messages.total_pages > 1 %>
+    <%= render_pagination @messages, Cms::EmailMessage %>
+<% end %>
